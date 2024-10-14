@@ -279,14 +279,14 @@ Public Class Form1
             ' Obtiene los datos para generar los tickets
             If ValTicketM = 1 Then
                 claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
-                New SqlParameter("@Feci", SqlDbType.Date) With {.Value = "2024-04-01"},
-                New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = "2024-04-30"},
+                New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
+                New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
                 New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = If(String.IsNullOrEmpty(CEF), DBNull.Value, CEF)}
             }, "ResultadosTickets")
             Else
                 If CEF = "" Then
-                    txtLogs.Text = txtLogs.Text + "Entrando en condición... G1" + vbCrLf
-                    txtLogs.Text = txtLogs.Text + "Parámetros: Feci=" & FGeneracion & ", Fecf=" & fechaFin & ", CEF=" & CEF & vbCrLf
+                    'txtLogs.Text = txtLogs.Text + "Entrando en condición... G1" + vbCrLf
+                    'txtLogs.Text = txtLogs.Text + "Parámetros: Feci=" & FGeneracion & ", Fecf=" & fechaFin & ", CEF=" & CEF & vbCrLf
 
                     If chkFecha.Checked Then
                         claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
@@ -298,7 +298,7 @@ Public Class Form1
                         claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
                         New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
                         New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = FGeneracion},
-                        New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = DBNull.Value}
+                        New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = ""}
                     }, "ResultadosTickets")
                     End If
                 Else
@@ -333,7 +333,11 @@ Public Class Form1
 
                     ' Guardar el contenido del ticket en el log antes de llamar a SaveTicket
                     Try
-                        Dim logTicketPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+                        'Ruta:desarrollo
+                        'Dim logTicketPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+                        'Ruta:Producción
+                        Dim logTicketPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\Cointech_V\LOGS\log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
                         Dim logTicketContent As String = "Ticket: " + Ticket + vbCrLf + "Nombre Archivo: " + (da.Rows(i).Item(6).ToString + "_" + da.Rows(i - 0).Item(4).ToString) + vbCrLf + "Datos: " + (da.Rows(i).Item(4).ToString + "|" + da.Rows(i).Item(6).ToString + "|" + da.Rows(i - 0).Item(5).ToString) + "|" + da.Rows(i - 0).Item(7).ToString + vbCrLf + "-------------------------" + vbCrLf
                         File.AppendAllText(logTicketPath, logTicketContent)
                     Catch ex As Exception
@@ -352,7 +356,13 @@ Public Class Form1
             Next
 
             ' Guarda en log_mail.txt en lugar de enviar el correo
-            Dim logPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
+            'Ruta desarrollo:
+            'Dim logPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
+            'Rruta produccion:
+            Dim logPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\Cointech_V\LOGS\log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
             Dim logContent As String = "Total Tickets por generar: " + NoRegistros.ToString + vbCrLf +
                                "Fecha que se ha generado: " + FGeneracion + vbCrLf +
                                "CEF: " + CEF + vbCrLf +
@@ -397,18 +407,18 @@ Public Class Form1
                 'localesFaltantes = GetLocalesFaltantesTickets(da.Rows(j).Item(0).ToString, ArmarfechaGeneracion_)
 
                 ''
-               
+
 
                 Try
 
                     Dim da As New DataTable
                     Dim Concatenar As String
 
-                    claseob.consultar_Localesfaltantes("select * from (select fp.*, lt.fechacreacion " + _
-                                                          " from vw_fa_pos fp left join adm_logtickets lt on fp.numero_comprobante = lt.numero_comprobante and fp.clocal=lt.clocal AND lt.fechaticket = fp.fecha " + _
-                                                          " where fp.fecha >= DateAdd(Day, -30, GETDATE()) " + _
-                                                          " AND datepart(YEAR,fp.fecha) =datepart(YEAR,GETDATE())	) t " + _
-                                                          " where importe > 1.0 and fecha = '" + ArmarfechaGeneracion_ + "' and Clocal='" + Local_ + "'" + _
+                    claseob.consultar_Localesfaltantes("select * from (select fp.*, lt.fechacreacion " +
+                                                          " from vw_fa_pos fp left join adm_logtickets lt on fp.numero_comprobante = lt.numero_comprobante and fp.clocal=lt.clocal AND lt.fechaticket = fp.fecha " +
+                                                          " where fp.fecha >= DateAdd(Day, -30, GETDATE()) " +
+                                                          " AND datepart(YEAR,fp.fecha) =datepart(YEAR,GETDATE())	) t " +
+                                                          " where importe > 1.0 and fecha = '" + ArmarfechaGeneracion_ + "' and Clocal='" + Local_ + "'" +
                                                           " order by fecha,numero_comprobante, clocal ", "VW_FA_POS")
 
 
@@ -440,11 +450,11 @@ Public Class Form1
 
                             lblTktCont.Text = (i + 1).ToString
 
-                           
+
 
                             Me.Refresh()
 
-                           
+
 
                         End If
 
@@ -510,11 +520,11 @@ Public Class Form1
             Dim da As New DataTable
             Dim Concatenar As String
 
-            claseob.consultar("select * from (select fp.*, lt.fechacreacion " + _
-                                                  " from vw_fa_pos fp left join adm_logtickets lt on fp.numero_comprobante = lt.numero_comprobante and fp.clocal=lt.clocal AND lt.fechaticket = fp.fecha " + _
-                                                  " where fp.fecha >= DateAdd(Day, -30, GETDATE()) " + _
-                                                  " AND datepart(YEAR,fp.fecha) =datepart(YEAR,GETDATE())	) t " + _
-                                                  " where importe > 1.0 and fecha = '" + fechaTicket + "' and Clocal='" + sucursal + "'" + _
+            claseob.consultar("select * from (select fp.*, lt.fechacreacion " +
+                                                  " from vw_fa_pos fp left join adm_logtickets lt on fp.numero_comprobante = lt.numero_comprobante and fp.clocal=lt.clocal AND lt.fechaticket = fp.fecha " +
+                                                  " where fp.fecha >= DateAdd(Day, -30, GETDATE()) " +
+                                                  " AND datepart(YEAR,fp.fecha) =datepart(YEAR,GETDATE())	) t " +
+                                                  " where importe > 1.0 and fecha = '" + fechaTicket + "' and Clocal='" + sucursal + "'" +
                                                   " order by fecha,numero_comprobante, clocal ", "VW_FA_POS")
 
 
@@ -586,9 +596,9 @@ Public Class Form1
             '"fechaEnvio|" + DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss") + vbCrLf + _
             '"fechaEnvio|" + DTPFecha.Value.ToString("yyyy-MM-dd") + DateTime.Now.ToString("THH:mm:ss") + vbCrLf + _
 
-            Resultado = "aliasSucursal|" + sucursal + vbCrLf + _
-                  "refID|" + sucursal.Trim + "-" + refId.ToString.Trim + Ad_RefId + vbCrLf + _
-                  "fechaEnvio|" + fechaTicket.Substring(6, 4) + "-" + fechaTicket.Substring(3, 2) + "-" + fechaTicket.Substring(0, 2) + DateTime.Now.ToString("THH:mm:ss") + vbCrLf + _
+            Resultado = "aliasSucursal|" + sucursal + vbCrLf +
+                  "refID|" + sucursal.Trim + "-" + refId.ToString.Trim + Ad_RefId + vbCrLf +
+                  "fechaEnvio|" + fechaTicket.Substring(6, 4) + "-" + fechaTicket.Substring(3, 2) + "-" + fechaTicket.Substring(0, 2) + DateTime.Now.ToString("THH:mm:ss") + vbCrLf +
                   "fechaVigencia|" + (DateTime.Now.AddDays(Convert.ToInt32(DiasVenci))).ToString("yyyy-MM-ddTHH:mm:ss")
             Return Resultado
 
@@ -623,19 +633,19 @@ Public Class Form1
 
 
 
-            Resultado = "[Datos Generales]" + vbCrLf + _
-                 "Version|3.3" + vbCrLf + _
-                 "Serie|" + sucursal.Trim + vbCrLf + _
-                 "Folio|" + sucursal.Trim + "-" + refId + vbCrLf + _
-                 "FormaPago|" + FPago + vbCrLf + _
-                 "CondicionesDePago|" + vbCrLf + _
-                 "Subtotal|" + Convert.ToDouble(subtotal).ToString("####0.00") + vbCrLf + _
-                 "Descuento|0.00" + vbCrLf + _
-                 "Moneda|MXN" + vbCrLf + _
-                 "TipoCambio|1" + vbCrLf + _
-                 "Total|" + Convert.ToDouble(total).ToString("####0.00") + vbCrLf + _
-                 "TipoDeComprobante|I" + vbCrLf + _
-                 "MetodoPago|PUE" + vbCrLf + _
+            Resultado = "[Datos Generales]" + vbCrLf +
+                 "Version|3.3" + vbCrLf +
+                 "Serie|" + sucursal.Trim + vbCrLf +
+                 "Folio|" + sucursal.Trim + "-" + refId + vbCrLf +
+                 "FormaPago|" + FPago + vbCrLf +
+                 "CondicionesDePago|" + vbCrLf +
+                 "Subtotal|" + Convert.ToDouble(subtotal).ToString("####0.00") + vbCrLf +
+                 "Descuento|0.00" + vbCrLf +
+                 "Moneda|MXN" + vbCrLf +
+                 "TipoCambio|1" + vbCrLf +
+                 "Total|" + Convert.ToDouble(total).ToString("####0.00") + vbCrLf +
+                 "TipoDeComprobante|I" + vbCrLf +
+                 "MetodoPago|PUE" + vbCrLf +
                  "LugarExpedicion|" + Cp
             Return Resultado
         Catch ex As Exception
@@ -661,17 +671,17 @@ Public Class Form1
 
             If Pruebas = 1 Then
 
-                DatosEmisor = "[DATOS DEL EMISOR]" + vbCrLf + _
-                              "emRfc|AAA010101AAA" + vbCrLf + _
-                              "emNombre|Razon social de Pruebas S.A de C.V." + vbCrLf + _
+                DatosEmisor = "[DATOS DEL EMISOR]" + vbCrLf +
+                              "emRfc|AAA010101AAA" + vbCrLf +
+                              "emNombre|Razon social de Pruebas S.A de C.V." + vbCrLf +
                               "emRegimenFiscal|601"
 
 
             Else
 
-                DatosEmisor = "[DATOS DEL EMISOR]" + vbCrLf + _
-                             "emRfc|" + RFC + vbCrLf + _
-                             "emNombre|" + Emisor + vbCrLf + _
+                DatosEmisor = "[DATOS DEL EMISOR]" + vbCrLf +
+                             "emRfc|" + RFC + vbCrLf +
+                             "emNombre|" + Emisor + vbCrLf +
                              "emRegimenFiscal|" + Regimen
 
             End If
@@ -705,21 +715,21 @@ Public Class Form1
             'Me.Refresh()
 
 
-            Resultado = "[Datos del Concepto]" + vbCrLf + _
-                        "ClaveProdServ|01010101" + vbCrLf + _
-                        "NoIdentificacion|" + NoIdentificacion + "_" + FGeneracionJAP + vbCrLf + _
-                        "Cantidad|1" + vbCrLf + _
-                        "ClaveUnidad|E48" + vbCrLf + _
-                        "Unidad|Unidad de Servicio" + vbCrLf + _
-                        "Descripcion|Servicios de consumo en Recorcholis del día " + FGeneracion + " " + NoIdentificacion + vbCrLf + _
-                        "ValorUnitario|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf + _
-                        "Importe|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf + _
-                        "conDescuento|0.00" + vbCrLf + _
-                        vbCrLf + _
-                        "trasladoConcImpuesto|002" + vbCrLf + _
-                        "trasladoConcBase|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf + _
-                        "trasladoConcTasaOCuota|0.1600" + vbCrLf + _
-                        "trasladoConcTipoFactor|Tasa" + vbCrLf + _
+            Resultado = "[Datos del Concepto]" + vbCrLf +
+                        "ClaveProdServ|01010101" + vbCrLf +
+                        "NoIdentificacion|" + NoIdentificacion + "_" + FGeneracionJAP + vbCrLf +
+                        "Cantidad|1" + vbCrLf +
+                        "ClaveUnidad|E48" + vbCrLf +
+                        "Unidad|Unidad de Servicio" + vbCrLf +
+                        "Descripcion|Servicios de consumo en Recorcholis del día " + FGeneracion + " " + NoIdentificacion + vbCrLf +
+                        "ValorUnitario|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf +
+                        "Importe|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf +
+                        "conDescuento|0.00" + vbCrLf +
+                        vbCrLf +
+                        "trasladoConcImpuesto|002" + vbCrLf +
+                        "trasladoConcBase|" + Convert.ToDouble(ValorUnitario).ToString("####0.00") + vbCrLf +
+                        "trasladoConcTasaOCuota|0.1600" + vbCrLf +
+                        "trasladoConcTipoFactor|Tasa" + vbCrLf +
                         "trasladoConcImporte|" + Convert.ToDouble(ValorUnitario * 0.16).ToString("####0.00")
 
             Return Resultado
@@ -745,14 +755,14 @@ Public Class Form1
             'txtLogs.Text = txtLogs.Text + "GetImpuestosComprobante " + vbCrLf
             'Me.Refresh()
 
-            Resultado = "[DATOS DEL IMPUESTO] " + vbCrLf + _
-                               "TotalImpuestosRetenidos|0.00" + vbCrLf + _
-                               "TotalImpuestosTrasladados|" + Convert.ToDouble(impuesto).ToString("####0.00") + vbCrLf + _
-                               vbCrLf + _
-                               "[Datos traslado]" + vbCrLf + _
-                               "trasladadoImpuesto|002" + vbCrLf + _
-                               "trasladadoTipoFactor|Tasa" + vbCrLf + _
-                               "trasladadoTasaOCuota|0.1600" + vbCrLf + _
+            Resultado = "[DATOS DEL IMPUESTO] " + vbCrLf +
+                               "TotalImpuestosRetenidos|0.00" + vbCrLf +
+                               "TotalImpuestosTrasladados|" + Convert.ToDouble(impuesto).ToString("####0.00") + vbCrLf +
+                               vbCrLf +
+                               "[Datos traslado]" + vbCrLf +
+                               "trasladadoImpuesto|002" + vbCrLf +
+                               "trasladadoTipoFactor|Tasa" + vbCrLf +
+                               "trasladadoTasaOCuota|0.1600" + vbCrLf +
                                "trasladadoImporte|" + Convert.ToDouble(impuesto).ToString("####0.00")
             Return Resultado
         Catch ex As Exception
@@ -784,7 +794,12 @@ Public Class Form1
             Dim responseResult As String = If(ResFact.Resultado.ToString(), "Resultado no disponible")
 
             ' Almacena la respuesta detallada en el archivo log_ws.txt
-            Dim logWSPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+            'Ruta desarrollo:
+            'Dim logWSPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
+            'Ruta produccion:
+            Dim logWSPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\LOGS\log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+
             Dim logWSContent As String = "Webservice Response for Ticket: " + NameFile + vbCrLf +
                                      "Response Message: " + responseMessage + vbCrLf +
                                      "Response Result: " + responseResult + vbCrLf +
