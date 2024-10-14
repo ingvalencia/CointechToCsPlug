@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="https://www.csfacturacion.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://schemas.xmlsoap.org/wsdl/" targetNamespace="https://www.csfacturacion.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="https://www.csfacturacion.com">
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/" />
+      <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/" />
+      <xsd:complexType name="respuestaUpload">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaValidarticket">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+          <xsd:element name="cDatosreceptor" type="xsd:string" />
+          <xsd:element name="XML64" type="xsd:string" />
+          <xsd:element name="PDF64" type="xsd:string" />
+          <xsd:element name="NAMEFILE" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaValidarticket33">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+          <xsd:element name="cDatosreceptor" type="xsd:string" />
+          <xsd:element name="XML64" type="xsd:string" />
+          <xsd:element name="PDF64" type="xsd:string" />
+          <xsd:element name="NAMEFILE" type="xsd:string" />
+          <xsd:element name="IEPS" type="xsd:boolean" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaObtenerdatosticket">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+          <xsd:element name="cDatosticket" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaObtenerdatosticket33">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+          <xsd:element name="cDatosticket" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaTimbrado">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="XML64" type="xsd:string" />
+          <xsd:element name="PDF64" type="xsd:string" />
+          <xsd:element name="PDF" type="xsd:base64Binary" />
+          <xsd:element name="XML" type="xsd:base64Binary" />
+          <xsd:element name="NAMEFILE" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaTimbrado33">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="XML64" type="xsd:string" />
+          <xsd:element name="PDF64" type="xsd:string" />
+          <xsd:element name="PDF" type="xsd:base64Binary" />
+          <xsd:element name="XML" type="xsd:base64Binary" />
+          <xsd:element name="NAMEFILE" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaTimbradoGlobal33">
+        <xsd:all>
+          <xsd:element name="Msj" type="xsd:string" />
+          <xsd:element name="XML64" type="xsd:string" />
+          <xsd:element name="PDF64" type="xsd:string" />
+          <xsd:element name="PDF" type="xsd:base64Binary" />
+          <xsd:element name="XML" type="xsd:base64Binary" />
+          <xsd:element name="NAMEFILE" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+      <xsd:complexType name="respuestaUploadzip">
+        <xsd:all>
+          <xsd:element name="Mensaje" type="xsd:string" />
+          <xsd:element name="Resumen" type="xsd:string" />
+          <xsd:element name="Errores" type="xsd:string" />
+          <xsd:element name="Resultado" type="xsd:boolean" />
+        </xsd:all>
+      </xsd:complexType>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="UploadarchivoRequest">
+    <wsdl:part name="Password" type="xsd:string" />
+    <wsdl:part name="Archivo" type="xsd:base64Binary" />
+  </wsdl:message>
+  <wsdl:message name="UploadarchivoResponse">
+    <wsdl:part name="respuestaUpload" type="tns:respuestaUpload" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicketRequest">
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="Password" type="xsd:string" />
+    <wsdl:part name="cDatosreceptor" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicketResponse">
+    <wsdl:part name="respuestaTimbrado" type="tns:respuestaTimbrado" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicket33Request">
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="Password" type="xsd:string" />
+    <wsdl:part name="cDatosreceptor" type="xsd:string" />
+    <wsdl:part name="cRfcEmisor" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicket33Response">
+    <wsdl:part name="respuestaTimbrado33" type="tns:respuestaTimbrado33" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicketGlobal33Request">
+    <wsdl:part name="Password" type="xsd:string" />
+    <wsdl:part name="Archivo" type="xsd:base64Binary" />
+  </wsdl:message>
+  <wsdl:message name="timbrarTicketGlobal33Response">
+    <wsdl:part name="respuestaTimbradoGlobal33" type="tns:respuestaTimbradoGlobal33" />
+  </wsdl:message>
+  <wsdl:message name="validarTicketRequest">
+    <wsdl:part name="dTotal" type="xsd:double" />
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="cRfcemisor" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="validarTicketResponse">
+    <wsdl:part name="respuestaValidarticket" type="tns:respuestaValidarticket" />
+  </wsdl:message>
+  <wsdl:message name="validarTicket33Request">
+    <wsdl:part name="dTotal" type="xsd:double" />
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="cRfcReceptor" type="xsd:string" />
+    <wsdl:part name="cRfcemisor" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="validarTicket33Response">
+    <wsdl:part name="respuestaValidarticket33" type="tns:respuestaValidarticket33" />
+  </wsdl:message>
+  <wsdl:message name="obtenerDatosticketRequest">
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="Password" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="obtenerDatosticketResponse">
+    <wsdl:part name="respuestaObtenerdatosticket" type="tns:respuestaObtenerdatosticket" />
+  </wsdl:message>
+  <wsdl:message name="obtenerDatosticket33Request">
+    <wsdl:part name="cRefid" type="xsd:string" />
+    <wsdl:part name="Password" type="xsd:string" />
+    <wsdl:part name="cRfcEmisor" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="obtenerDatosticket33Response">
+    <wsdl:part name="respuestaObtenerdatosticket33" type="tns:respuestaObtenerdatosticket33" />
+  </wsdl:message>
+  <wsdl:message name="uploadzipRequest">
+    <wsdl:part name="Archivo" type="xsd:base64Binary" />
+    <wsdl:part name="nombreArchivo" type="xsd:string" />
+  </wsdl:message>
+  <wsdl:message name="uploadzipResponse">
+    <wsdl:part name="respuestaUploadzip" type="tns:respuestaUploadzip" />
+  </wsdl:message>
+  <wsdl:portType name="csticketServicePortType">
+    <wsdl:operation name="Uploadarchivo">
+      <documentation>Documentacion de Upload Archivo</documentation>
+      <wsdl:input message="tns:UploadarchivoRequest" />
+      <wsdl:output message="tns:UploadarchivoResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicket">
+      <documentation>Documentacion de Timbrar Ticket</documentation>
+      <wsdl:input message="tns:timbrarTicketRequest" />
+      <wsdl:output message="tns:timbrarTicketResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicket33">
+      <documentation>Documentacion de Timbrar Ticket</documentation>
+      <wsdl:input message="tns:timbrarTicket33Request" />
+      <wsdl:output message="tns:timbrarTicket33Response" />
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicketGlobal33">
+      <documentation>Documentacion de Timbrar Tickets Global</documentation>
+      <wsdl:input message="tns:timbrarTicketGlobal33Request" />
+      <wsdl:output message="tns:timbrarTicketGlobal33Response" />
+    </wsdl:operation>
+    <wsdl:operation name="validarTicket">
+      <documentation>Documentacion de Validar Ticket</documentation>
+      <wsdl:input message="tns:validarTicketRequest" />
+      <wsdl:output message="tns:validarTicketResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="validarTicket33">
+      <documentation>Documentacion de Validar Ticket V33</documentation>
+      <wsdl:input message="tns:validarTicket33Request" />
+      <wsdl:output message="tns:validarTicket33Response" />
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosticket">
+      <documentation>Documentacion de Obtener datos del ticket</documentation>
+      <wsdl:input message="tns:obtenerDatosticketRequest" />
+      <wsdl:output message="tns:obtenerDatosticketResponse" />
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosticket33">
+      <documentation>Documentacion de Obtener datos del ticket</documentation>
+      <wsdl:input message="tns:obtenerDatosticket33Request" />
+      <wsdl:output message="tns:obtenerDatosticket33Response" />
+    </wsdl:operation>
+    <wsdl:operation name="uploadzip">
+      <documentation>Metodo para subir batch en ZIP</documentation>
+      <wsdl:input message="tns:uploadzipRequest" />
+      <wsdl:output message="tns:uploadzipResponse" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="csticketServiceBinding" type="tns:csticketServicePortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <wsdl:operation name="Uploadarchivo">
+      <soap:operation soapAction="urn:wsdlcsticket#Uploadarchivo" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicket">
+      <soap:operation soapAction="urn:wsdlcsticket#timbrarTicket" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicket33">
+      <soap:operation soapAction="urn:wsdlcsticket#timbrarTicket33" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="timbrarTicketGlobal33">
+      <soap:operation soapAction="urn:wsdlcsticket#timbrarTicketGlobal33" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarTicket">
+      <soap:operation soapAction="urn:wsdlcsticket#validarTicket" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="validarTicket33">
+      <soap:operation soapAction="urn:wsdlcsticket#validarTicket33" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosticket">
+      <soap:operation soapAction="urn:wsdlcsticket#obtenerDatosticket" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="obtenerDatosticket33">
+      <soap:operation soapAction="urn:wsdlcsticket#obtenerDatosticket33" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="uploadzip">
+      <soap:operation soapAction="urn:wsdlcsticket#Uploadzip" style="rpc" />
+      <wsdl:input>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="encoded" namespace="urn:https://www.csfacturacion.com" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="csticketService">
+    <wsdl:port name="csticketServicePort" binding="tns:csticketServiceBinding">
+      <soap:address location="https://csfacturacion.com:443/webservices/csticket/ticketsV33.php" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

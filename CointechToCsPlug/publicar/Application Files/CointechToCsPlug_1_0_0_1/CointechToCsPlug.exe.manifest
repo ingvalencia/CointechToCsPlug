@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="CointechToCsPlug.exe" version="1.0.0.1" publicKeyToken="04c2c869efe65b58" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="CointechToCsPlug" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="CointechToCsPlug.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          Opciones del manifiesto de Control de cuentas de usuario
+          Si desea cambiar el nivel de Control de cuentas de usuario de Windows, reemplace el 
+          nodo requestedExecutionLevel por alguno de los siguientes.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         Si desea usar la virtualización de archivos y del Registro para la 
+         compatibilidad con versiones anteriores, elimine el nodo requestedExecutionLevel.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CointechToCsPlug.exe" size="56712">
+      <assemblyIdentity name="CointechToCsPlug" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>2FXEGxwLdrc+IzQOXnJJ4Pwlk+I=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+<publisherIdentity name="CN=IT_DEV\Admin" issuerKeyHash="66e579719e77b31e7d3c718570a7421140b4bcd4" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>AtYkzEVgvc1DMXJv4LIx9vjyzjo=</DigestValue></Reference></SignedInfo><SignatureValue>JVjlgx01PgUWrxYKcCKROs78TUowGoBKupGVJWm+vKtTX+tEnKYxovaRMVtbqAKEuq+OvyFwetLxV1JUmUQQAcSkIC/vzl0jpyZgWMTaELINrq/NL2Hb2H9w3DAOjQNPtdBqQt/FWVYIEIUbzapHLHMZKwJZFqTNb2o8m4Jc6+Y=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>t20jW4GzMQ3bG47yEqxclIWVdgpnz2iJRTOmEKb4sfEY9bUDcudAeT330F/OarGQiHvtNrUrdflGqhRJndWzuHkUgmHaJnAfdt7r3cu7qg6yQrvXze/WtGvwY30FI1+lVpQUAPB/i7GRcbLgg9gk3gJROWX+9btzPOyFvJCCE8U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="3acef2f8f631b2e06f723143cdbd6045cc24d602" Description="" Url=""><as:assemblyIdentity name="CointechToCsPlug.exe" version="1.0.0.1" publicKeyToken="04c2c869efe65b58" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=IT_DEV\Admin</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>JQbphi4gqPxZLw8F654Fh8VH07U=</DigestValue></Reference></SignedInfo><SignatureValue>aoGFq6Ii2G1itsGnfAuWKomPnV5pPwJl+t9F02jvaBzifAM92OCJgYFIFNjRzOcvEvIeI1vKVYNL58bJ8b5keaf3CKAoqMjK6bK+6Wj1Wgd0xYs8GuS4PPB+LufbsIQqmvGPt26Sb26B++iN073XFPBsYQo8lckX5PGnnafNG9o=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>t20jW4GzMQ3bG47yEqxclIWVdgpnz2iJRTOmEKb4sfEY9bUDcudAeT330F/OarGQiHvtNrUrdflGqhRJndWzuHkUgmHaJnAfdt7r3cu7qg6yQrvXze/WtGvwY30FI1+lVpQUAPB/i7GRcbLgg9gk3gJROWX+9btzPOyFvJCCE8U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIByTCCATKgAwIBAgIQbX8lz6Q/n5dG3Z3egH332DANBgkqhkiG9w0BAQUFADAjMSEwHwYDVQQDHhgASQBUAF8ARABFAFYAXABBAGQAbQBpAG4wHhcNMTcxMTE0MTkwNjE2WhcNMTgxMTE1MDEwNjE2WjAjMSEwHwYDVQQDHhgASQBUAF8ARABFAFYAXABBAGQAbQBpAG4wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALdtI1uBszEN2xuO8hKsXJSFlXYKZ89oiUUzphCm+LHxGPW1A3LnQHk999BfzmqxkIh77Ta1K3X5RqoUSZ3Vs7h5FIJh2iZwH3be693Lu6oOskK7183v1rRr8GN9BSNfpVaUFADwf4uxkXGy4IPYJN4CUTll/vW7czzshbyQghPFAgMBAAEwDQYJKoZIhvcNAQEFBQADgYEAWeTHSe/7eKuCJ85aZ1FanUUbnEEVz3AQERT7vBhEQ/xrRlOIEUf5mKN1GgFliBtQ3Py9OEXyI8QnjTdwvA6Znf60UE0OJ7LU31wFemG+2NQFPkzJ5UHOM+nQtjpCRruOZ4IBTMmyh1kEwL8jKlh1w47zRAPy46XbCFeHIlT+Z8A=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
