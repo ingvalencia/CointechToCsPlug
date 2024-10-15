@@ -264,6 +264,14 @@ Public Class Form1
 
     Public Sub GetTickts(CEF As String, FechaSD As String)
         Try
+            ' Declarar logDirectory una vez fuera de cualquier bloque
+            Dim logDirectory As String = Path.Combine(Application.StartupPath, "LOGS")
+
+            ' Verificar si el directorio existe, si no, crearlo
+            If Not Directory.Exists(logDirectory) Then
+                Directory.CreateDirectory(logDirectory)
+            End If
+
             Dim da1 As New DataTable
             Dim da As New DataTable
             Dim Concat_ As String = ""
@@ -279,36 +287,31 @@ Public Class Form1
             ' Obtiene los datos para generar los tickets
             If ValTicketM = 1 Then
                 claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
-                New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
-                New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
-                New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = If(String.IsNullOrEmpty(CEF), DBNull.Value, CEF)}
-            }, "ResultadosTickets")
+            New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
+            New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
+            New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = If(String.IsNullOrEmpty(CEF), DBNull.Value, CEF)}
+        }, "ResultadosTickets")
             Else
                 If CEF = "" Then
-                    'txtLogs.Text = txtLogs.Text + "Entrando en condición... G1" + vbCrLf
-                    'txtLogs.Text = txtLogs.Text + "Parámetros: Feci=" & FGeneracion & ", Fecf=" & fechaFin & ", CEF=" & CEF & vbCrLf
-
                     If chkFecha.Checked Then
                         claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
-                        New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
-                        New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
-                        New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = ""}
-                    }, "ResultadosTickets")
-                    Else
-                        claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
-                        New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
-                        New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = FGeneracion},
-                        New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = ""}
-                    }, "ResultadosTickets")
-                    End If
-                Else
-                    'txtLogs.Text = txtLogs.Text + "Entrando en condición... G1" + vbCrLf
-                    'txtLogs.Text = txtLogs.Text + "Parámetros: Feci=" & FGeneracion & ", Fecf=" & fechaFin & ", CEF=" & CEF & vbCrLf
-                    claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
                     New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
                     New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
-                    New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = CEF}
+                    New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = ""}
                 }, "ResultadosTickets")
+                    Else
+                        claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
+                    New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
+                    New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = FGeneracion},
+                    New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = ""}
+                }, "ResultadosTickets")
+                    End If
+                Else
+                    claseob.consultarSP("SP_SELEC_TICKETS", New List(Of SqlParameter) From {
+                New SqlParameter("@Feci", SqlDbType.Date) With {.Value = FGeneracion},
+                New SqlParameter("@Fecf", SqlDbType.Date) With {.Value = fechaFin},
+                New SqlParameter("@CEF", SqlDbType.VarChar) With {.Value = CEF}
+            }, "ResultadosTickets")
                 End If
             End If
 
@@ -333,15 +336,13 @@ Public Class Form1
 
                     ' Guardar el contenido del ticket en el log antes de llamar a SaveTicket
                     Try
-                        'Ruta:desarrollo
-                        'Dim logTicketPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
-                        'Ruta:Producción
-                        Dim logTicketPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\Cointech_V\LOGS\log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+                        Dim logTicketPath As String = Path.Combine(logDirectory, "log_envio_ticket_" + DateTime.Now.ToString("yyyyMMdd") + ".txt")
 
                         Dim logTicketContent As String = "Ticket: " + Ticket + vbCrLf + "Nombre Archivo: " + (da.Rows(i).Item(6).ToString + "_" + da.Rows(i - 0).Item(4).ToString) + vbCrLf + "Datos: " + (da.Rows(i).Item(4).ToString + "|" + da.Rows(i).Item(6).ToString + "|" + da.Rows(i - 0).Item(5).ToString) + "|" + da.Rows(i - 0).Item(7).ToString + vbCrLf + "-------------------------" + vbCrLf
                         File.AppendAllText(logTicketPath, logTicketContent)
+                        'txtLogs.Text = txtLogs.Text + "Log guardado correctamente en " + logTicketPath + vbCrLf
                     Catch ex As Exception
-                        txtLogs.Text = txtLogs.Text + "Error al guardar el log del ticket: " + ex.ToString + vbCrLf
+                        'txtLogs.Text = txtLogs.Text + "Error al guardar el log del ticket: " + ex.ToString + vbCrLf
                     End Try
 
                     ' Llamada al método SaveTicket original
@@ -356,21 +357,17 @@ Public Class Form1
             Next
 
             ' Guarda en log_mail.txt en lugar de enviar el correo
-
-            'Ruta desarrollo:
-            'Dim logPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
-
-            'Rruta produccion:
-            Dim logPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\Cointech_V\LOGS\log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+            Dim logPath As String = Path.Combine(logDirectory, "log_mail_" + DateTime.Now.ToString("yyyyMMdd") + ".txt")
 
             Dim logContent As String = "Total Tickets por generar: " + NoRegistros.ToString + vbCrLf +
-                               "Fecha que se ha generado: " + FGeneracion + vbCrLf +
-                               "CEF: " + CEF + vbCrLf +
-                               "Detalles: <table border=1>" + Concat_ + "</table>"
+                           "Fecha que se ha generado: " + FGeneracion + vbCrLf +
+                           "CEF: " + CEF + vbCrLf +
+                           "Detalles: <table border=1>" + Concat_ + "</table>"
             Try
                 File.AppendAllText(logPath, logContent)
+                'txtLogs.Text = txtLogs.Text + "Log guardado correctamente en " + logPath + vbCrLf
             Catch ex As Exception
-                txtLogs.Text = txtLogs.Text + "Error al guardar el log en " + logPath + ": " + ex.ToString + vbCrLf
+                'txtLogs.Text = txtLogs.Text + "Error al guardar el log en " + logPath + ": " + ex.ToString + vbCrLf
             End Try
 
             lblProcesando.Text = "Procesado ..."
@@ -379,6 +376,9 @@ Public Class Form1
             Me.Refresh()
         End Try
     End Sub
+
+
+
 
     Public Sub LocalesFaltantesTicket(FGeneracion_ As String)
         '30/05/2021 ( dia smes y año )
@@ -781,6 +781,14 @@ Public Class Form1
 
         Try
 
+            ' Declarar logDirectory una vez fuera de cualquier bloque
+            Dim logDirectory As String = Path.Combine(Application.StartupPath, "LOGS")
+
+            ' Verificar si el directorio existe, si no, crearlo
+            If Not Directory.Exists(logDirectory) Then
+                Directory.CreateDirectory(logDirectory)
+            End If
+
             ' Inicializa el servicio de facturación y prepara la respuesta
             Dim CSFact As New CointechToCsPlug.csfacturacion.csticketService
             Dim ResFact As New CointechToCsPlug.csfacturacion.respuestaUpload
@@ -798,7 +806,7 @@ Public Class Form1
             'Dim logWSPath As String = "C:\Users\PROGRAMADOR 1\Downloads\LOGS\log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
 
             'Ruta produccion:
-            Dim logWSPath As String = "C:\Users\Administrador\Documents\Proyectos_Gio\LOGS\log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt"
+            Dim logTicketPath As String = Path.Combine(logDirectory, "log_ws_" + DateTime.Now.ToString("yyyyMMdd") + ".txt")
 
             Dim logWSContent As String = "Webservice Response for Ticket: " + NameFile + vbCrLf +
                                      "Response Message: " + responseMessage + vbCrLf +
@@ -806,9 +814,9 @@ Public Class Form1
                                      "--------------------------------------------------------" + vbCrLf
             Try
                 ' Guarda el contenido en el archivo log_ws.txt
-                File.AppendAllText(logWSPath, logWSContent)
+                File.AppendAllText(logTicketPath, logWSContent)
             Catch ex As Exception
-                txtLogs.Text = txtLogs.Text + "Error al guardar el log en " + logWSPath + ": " + ex.ToString + vbCrLf
+                txtLogs.Text = txtLogs.Text + "Error al guardar el log en " + logTicketPath + ": " + ex.ToString + vbCrLf
             End Try
 
 
