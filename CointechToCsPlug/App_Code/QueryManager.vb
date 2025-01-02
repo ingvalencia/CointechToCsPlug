@@ -327,52 +327,50 @@ Public Class QueryManager
     '+----------------------------------------------------------------------------
 
     Public Function SendMail(Email As String, Asunto As String, Body As String, Adjunto As String, Adjunto2 As String) As String
-
         Dim Result As String = "Mensaje enviado"
-
         Dim message As New MailMessage
         Dim smtp As New SmtpClient
 
-
-        'message.From = New MailAddress("notificaciones@kataplum.com.mx")
-        'message.From = New MailAddress("jalanis@grupodiniz.com.mx")
-        message.From = New MailAddress(SmtpUser)
-        message.To.Add(Email.ToString)
-        'message.Body = "Estimado " + Nombre + vbCrLf + vbCrLf + "Adjuntamos la cotizacion generada a traves de el Portal de Raven, esperamos porder contar con usted." + vbCrLf + vbCrLf + "Para Mayores informes contacte a su agente de ventas." + vbCrLf + vbCrLf + "No Conteste a este mail fue, creado atumaticamente a través de:" + vbCrLf + " B-Focus Systems."
-        message.Body = Body
-        'message.Body = GridViewToHtml(GridDetaVede)
-        message.Subject = Asunto
+        ' Configuración del remitente
+        message.From = New MailAddress("postmaster@mg.recorcholis.com.mx") ' Nuevo usuario SMTP
+        message.To.Add(Email.ToString) ' Agregar destinatario
+        message.Subject = Asunto ' Asunto del correo
+        message.Body = Body ' Cuerpo del mensaje
         message.Priority = MailPriority.Normal
-        message.IsBodyHtml = False
+        message.IsBodyHtml = True ' Indica que el cuerpo es HTML
 
-
-        If Adjunto.Length > 2 Then
-            Dim archivoAdjunto As New System.Net.Mail.Attachment(Adjunto)
+        ' Adjuntar archivos si se especifican
+        If Not String.IsNullOrEmpty(Adjunto) AndAlso Adjunto.Length > 2 Then
+            Dim archivoAdjunto As New Attachment(Adjunto)
             message.Attachments.Add(archivoAdjunto)
-
         End If
-        If Adjunto2.Length > 2 Then
-            Dim archivoAdjunto2 As New System.Net.Mail.Attachment(Adjunto2)
+
+        If Not String.IsNullOrEmpty(Adjunto2) AndAlso Adjunto2.Length > 2 Then
+            Dim archivoAdjunto2 As New Attachment(Adjunto2)
             message.Attachments.Add(archivoAdjunto2)
         End If
 
-        message.IsBodyHtml = True
-
-        smtp.EnableSsl = SmtpSsl
-        smtp.Port = SmtpPort
-        smtp.Host = SmtpServer
-        smtp.Credentials = New Net.NetworkCredential(SmtpUser, SmtpPass)
+        ' Configuración del cliente SMTP
+        smtp.EnableSsl = False ' Nueva configuración SSL (deshabilitada)
+        smtp.Port = 2525 ' Nuevo puerto SMTP
+        smtp.Host = "smtp.mailgun.org" ' Nuevo servidor SMTP
+        smtp.Credentials = New NetworkCredential("postmaster@mg.recorcholis.com.mx", "70d1c3c59d880dba3f4550f6800a6909-f6fe91d3-4c2f8fcb") ' Nuevas credenciales SMTP
 
         Try
+            ' Enviar el correo
             smtp.Send(message)
             Return Result
         Catch ex As Exception
-            SaveError("Error... :" + ex.ToString)
-            Return "Menseje no enviado"
-
+            ' Manejo de errores
+            SaveError("Error al enviar el correo: " & ex.ToString())
+            Return "Mensaje no enviado"
+        Finally
+            ' Liberar recursos
+            If message IsNot Nothing Then message.Dispose()
+            If smtp IsNot Nothing Then smtp.Dispose()
         End Try
-
     End Function
+
 
     '+----------------------------------------------------------------------------
     '+	Funcion para almacenar errores 

@@ -18,10 +18,10 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-
-
+        ' Llamada a la función para obtener datos del emisor
         GetVarDatosEmisor()
 
+        ' Establecer fondo transparente para etiquetas
         lbl_title.BackColor = Color.Transparent
         lblEstatus.BackColor = Color.Transparent
         lblDetenido.BackColor = Color.Transparent
@@ -33,30 +33,45 @@ Public Class Form1
         Label3.BackColor = Color.Transparent
         chkFecha.BackColor = Color.Transparent
 
+        ' Configurar la visibilidad de las etiquetas
         lblDetenido.Visible = False
         lblProcesando.Visible = False
 
+        ' Configurar los logs para que se puedan desplazar
         txtLogs.ScrollBars = ScrollBars.Vertical
 
+        ' Obtener configuraciones de correos
         MailAdmin = reader.GetValue("MailAdmin", GetType(String))
         MailTodos = reader.GetValue("MailTodos", GetType(String))
 
+        ' Configurar el Timer1
         Timer1.Enabled = True
         Timer1.Interval = 5000
 
+        ' Inicialización de logs con la fecha de inicio
         txtLogs.Text = txtLogs.Text + "INICIA Proceso Automatico . . ." + DateAndTime.Now.ToString + vbCrLf
         Me.Refresh()
 
+        ' Inicializar fechas
         FGeneracion = (Date.Now.AddDays(-1).ToShortDateString).ToString
         fechaFin = (Date.Now.AddDays(-1).ToShortDateString).ToString
-        DFecha = claseob.FechaJaponesa((Date.Now.AddDays(-1).ToShortDateString).ToString)
 
+        ' Asegurarse de que las fechas estén correctamente convertidas
+        If String.IsNullOrEmpty(FGeneracion) Or String.IsNullOrEmpty(fechaFin) Then
+            txtLogs.Text = txtLogs.Text + "Error: Fechas no inicializadas correctamente. Proceso detenido." + vbCrLf
+            Me.Refresh()
+            Exit Sub
+        End If
+
+        ' Convertir las fechas a formato japonés
+        DFecha = claseob.FechaJaponesa(FGeneracion)
         FGeneracionJAP = claseob.FechaJaponesa(FGeneracion)
 
+        ' Inicializar otras variables
         Ad_RefId = ""
-        
 
     End Sub
+
 
     Private Sub SalidaTXTToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SalidaTXTToolStripMenuItem.Click
         FRM_Adm_SalidaTXT.Show()
@@ -64,44 +79,51 @@ Public Class Form1
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Try
+            ' Verifica si el proceso está habilitado
+            If CancelaCreacion = "0" Then
+                Timer1.Enabled = False
+                Exit Sub
+            End If
 
-
-
-        If CancelaCreacion = "0" Then
-
-            Timer1.Enabled = False
-        Else
-            'inica la generacion de archivos txt
-
-            ValidaDirectorios()
-
+            ' Detiene el temporizador para evitar múltiples ejecuciones
             Timer1.Enabled = False
 
+            ' Inicializar variables y verificar fechas
+            txtLogs.Text = txtLogs.Text + "Inicializando variables..." + vbCrLf
+            Me.Refresh()
             InitalVars()
-            lblProcesando.Visible = True
+
+            If String.IsNullOrEmpty(FGeneracion) OrElse String.IsNullOrEmpty(fechaFin) Then
+                txtLogs.Text = txtLogs.Text + "Error: Fechas no inicializadas. Proceso automático detenido." + vbCrLf
+                Me.Refresh()
+                Exit Sub
+            End If
+
+            ' Confirmar las fechas en los logs
+            txtLogs.Text = txtLogs.Text + "Iniciando proceso automático con FGeneracion: " + FGeneracion + ", fechaFin: " + fechaFin + vbCrLf
             Me.Refresh()
 
+            ' Simula el clic en el botón Procesar
+            txtLogs.Text = txtLogs.Text + "Ejecutando proceso automático..." + vbCrLf
+            Me.Refresh()
+            btnProcesar.PerformClick() ' Simula el clic del botón Procesar
 
-
-            GetCefs()
-            UpdateLocalesProcesados()
-
-            lblProcesando.Text = "Procesado . . . "
+            ' Activa el siguiente temporizador si todo está correcto
+            Timer2.Enabled = True
+            Timer2.Interval = 20000
+            txtLogs.Text = txtLogs.Text + "Proceso automático terminado. Esperando próximo intervalo..." + vbCrLf
             Me.Refresh()
 
-            GetCefSinDatos()
-
-
-
-            Timer2.Enabled = True ' Activamos el control al iniciar el formulario
-            Timer2.Interval = 20000 ' Un segundo de intervalo ' Recuerda que es en milisegundos
-
-            txtLogs.Text = txtLogs.Text + "Terminando Proceso Automatico . . ." + DateAndTime.Now.ToString + vbCrLf
+        Catch ex As Exception
+            ' Manejo de errores generales
+            txtLogs.Text = txtLogs.Text + "Error inesperado en Timer1_Tick: " + ex.Message + vbCrLf
             Me.Refresh()
-
-        End If
-
+        End Try
     End Sub
+
+
+
 
     Private Sub btnCancelar_Click(sender As Object, e As EventArgs) Handles btnCancelar.Click
 
@@ -157,40 +179,38 @@ Public Class Form1
 
     Private Sub Timer2_Tick(sender As Object, e As EventArgs) Handles Timer2.Tick
 
-        SaveLog()
-        Me.Close()
+        Try
+            ' Verifica si el proceso se completó correctamente antes de guardar y cerrar
+            If lblProcesando.Text <> "Procesado . . ." Then
+                txtLogs.Text = txtLogs.Text + "Advertencia: El proceso no se completó correctamente. Timer2 detenido." + vbCrLf
+                Me.Close()
+            End If
+
+            ' Guarda los logs
+            txtLogs.Text = txtLogs.Text + "Guardando logs..." + vbCrLf
+            SaveLog()
+
+            ' Confirma que los logs se guardaron correctamente
+            txtLogs.Text = txtLogs.Text + "Logs guardados exitosamente. Cerrando sistema..." + vbCrLf
+
+            ' Cierra el formulario
+            Me.Close()
+
+        Catch ex As Exception
+            ' Maneja cualquier error al guardar los logs o cerrar el sistema
+            txtLogs.Text = txtLogs.Text + "Error en Timer2_Tick: " + ex.Message + vbCrLf
+            Me.Refresh()
+        End Try
 
     End Sub
+
 
     Private Sub DTPFecha_ValueChanged(sender As Object, e As EventArgs) Handles DTPFecha.ValueChanged
         chkFecha.Checked = True
     End Sub
 
-    Private Sub ValidaDirectorios()
 
-        Dim da As New DataTable
 
-        ' Obtienes mail para notificar errores.
-        claseob.consultar("select * from ADM_Config where IdConfig in(12) and visible='1'", "ADM_Config")
-        da = claseob.ds.Tables("ADM_Config")
-        MailNotifica = da.Rows(0).Item(2).ToString
-
-        claseob.consultar("select  SaveTicket  from FactElect group by SaveTicket", "FactElect")
-        da = claseob.ds.Tables("FactElect")
-
-        For i As Integer = 0 To (Convert.ToInt32(da.Rows.Count) - 1)
-
-			'If My.Computer.FileSystem.DirectoryExists(da.Rows(i).Item(0).ToString.ToUpper) <> True Then
-			If My.Computer.FileSystem.DirectoryExists(da.Rows(i).Item(0).ToString.ToUpper) <> True Then
-
-				claseob.insertar("exec 	[SP_SendMailFlujo] '" + MailNotifica + "', 'Error Unidades', 'Hay un error en las unidades mapeadas, servidor pruebas, Cointech to CS Plug  <br> No encontro: " + da.Rows(i).Item(0).ToString.ToUpper + "'")
-				End
-
-			End If
-
-		Next
-
-    End Sub
 
 #End Region
 
@@ -204,21 +224,33 @@ Public Class Form1
         Try
             Dim da As New DataTable
 
-            'Obtiene la ruta donde almacenara los txt
+            ' Obtiene la ruta donde almacenará los txt
             claseob.consultar("select * from ADM_Config where IdConfig in(1,4) and visible='1'", "ADM_Config")
             da = claseob.ds.Tables("ADM_Config")
             RutaTXT = da.Rows(0).Item(2).ToString
             DiasVenci = da.Rows(1).Item(2).ToString
 
-        Catch ex As Exception
+            ' Inicializa las fechas
+            If chkFecha.Checked Then
+                FGeneracion = DTPFecha.Value.ToShortDateString.ToString
+                fechaFin = DTPFechaFin.Value.ToShortDateString.ToString
+                DFecha = claseob.FechaJaponesa(DTPFecha.Value.ToShortDateString.ToString)
+            Else
+                FGeneracion = (Date.Now.AddDays(-1).ToShortDateString).ToString
+                fechaFin = (Date.Now.AddDays(-1).ToShortDateString).ToString
+                DFecha = claseob.FechaJaponesa(FGeneracion)
+            End If
 
+            ' Log para verificar las fechas
+            txtLogs.Text = txtLogs.Text + "FGeneracion: " + FGeneracion + ", fechaFin: " + fechaFin + vbCrLf
+
+        Catch ex As Exception
             txtLogs.Text = txtLogs.Text + " Error:InitalVars: " + ex.ToString + vbCrLf
             Me.Refresh()
-
         End Try
 
-
     End Sub
+
 
     Public Sub GetCefs()
 
